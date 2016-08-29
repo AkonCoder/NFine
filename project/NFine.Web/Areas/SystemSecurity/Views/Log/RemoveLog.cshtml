@@ -1,0 +1,30 @@
+﻿@{
+    ViewBag.Title = "RemoveLog";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        $.submitForm({
+            loading: "正在备份数据...",
+            url: "/SystemSecurity/Log/SubmitRemoveLog",
+            param: $("#form1").formSerialize(),
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+<form id="form1">
+    <div style="margin: 25px; margin-left: 40px; margin-right: 40px;">
+        <select id="keepTime" name="keepTime" class="form-control required">
+            <option value="">==请选择保留时间==</option>
+            <option value="7">保留近一周</option>
+            <option value="1">保留近一个月</option>
+            <option value="3">保留近三个月</option>
+            <option value="0">不保留，全部删除</option>
+        </select>
+    </div>
+</form>

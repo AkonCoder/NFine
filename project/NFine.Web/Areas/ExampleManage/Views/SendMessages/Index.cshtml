@@ -1,0 +1,45 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+    $(function () {
+    });
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        //$.submitForm({
+        //    url: "/SystemManage/Area/SubmitForm?keyValue=" + keyValue,
+        //    param: $("#form1").formSerialize(),
+        //    success: function () {
+        //        $.currentWindow().$("#gridList").resetSelection();
+        //        $.currentWindow().$("#gridList").trigger("reloadGrid");
+        //    }
+        //})
+    }
+</script>
+<form id="form1">
+    <div class="mail-box">
+        <div class="mail-header">发短信</div>
+        <div class="mail-body">
+            <table class="form">
+                <tr>
+                    <th class="formTitle">发送到 </th>
+                    <td class="formValue">
+                        <input id="txtPphone" name="txt_Account" type="text" class="form-control required" placeholder="输入多个手机号码请用英文符号,隔开" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle"  valign="top" style="padding-top: 5px;">短信内容</th>
+                    <td class="formValue">
+                        <textarea id="txt_Content" class="form-control required" style="height: 60px;"></textarea>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="mail-body" style="text-align: right;">
+            <a href="javascript:void()" onclick="submitForm()" class="btn btn-primary" style="margin-right: 5px;"><i class="fa fa-reply"></i>发送</a>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,68 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+
+<link href="~/Content/js/simditor/css/simditor.css" rel="stylesheet" />
+<script src="~/Content/js/simditor/js/module.min.js"></script>
+<script src="~/Content/js/simditor/js/hotkeys.min.js"></script>
+<script src="~/Content/js/simditor/js/simditor.min.js"></script>
+<style>
+    .simditor {
+        border-left: none;
+        border-right: none;
+        border-top: none;
+    }
+</style>
+<script>
+    var editor;
+    $(function () {
+        editor = new Simditor({
+            textarea: $('#content'),
+            toolbar: ['title', 'bold', 'italic', 'underline', 'strikethrough', 'color', '|', 'ol', 'ul', 'blockquote', 'code', 'table', '|', 'link', 'image', 'hr', '|', 'indent', 'outdent']
+        });
+    });
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        var postData = $("#form1").formSerialize();
+        postData["content"] = editor.getValue();
+        $.submitForm({
+            loading: "正在发送邮件...",
+            url: "/ExampleManage/SendMail/SendMail",
+            param: $("#form1").formSerialize(),
+            success: function () {
+                $.reload();
+            }
+        })
+    }
+</script>
+<form id="form1">
+    <div class="mail-box">
+        <div class="mail-header">写邮件</div>
+        <div class="mail-body">
+            <table class="form">
+                <tr>
+                    <th class="formTitle">发送到 </th>
+                    <td class="formValue">
+                        <input id="account" name="account" type="text" class="form-control required" placeholder="输入多个邮件地址请用英文符号;隔开" />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle">主题</th>
+                    <td class="formValue">
+                        <input id="title" name="title" type="text" class="form-control required" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="mail-body" style="padding: 0px;">
+            <textarea id="content" name="content" class="form-control" rows="5"></textarea>
+        </div>
+        <div class="mail-body" style="text-align: right;">
+            <a href="javascript:void()" onclick="submitForm()" class="btn btn-primary" style="margin-right: 5px;"><i class="fa fa-reply"></i>发送</a>
+            <a href="javascript:void()" class="btn btn-warning"><i class="fa fa-pencil"></i>存为草稿</a>
+        </div>
+    </div>
+</form>

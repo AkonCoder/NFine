@@ -1,0 +1,155 @@
+﻿@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        initControl();
+        if (!!keyValue) {
+            $.ajax({
+                url: "/SystemManage/Role/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                }
+            });
+        }
+    })
+    function initControl() {
+        $("#F_OrganizeId").bindSelect({
+            url: "/SystemManage/Organize/GetTreeSelectJson",
+        });
+        $("#F_Type").bindSelect({
+            url: "/SystemManage/ItemsData/GetSelectJson",
+            param: { enCode: "RoleType" }
+        });
+        $('#wizard').wizard().on('change', function (e, data) {
+            var $finish = $("#btn_finish");
+            var $next = $("#btn_next");
+            if (data.direction == "next") {
+                switch (data.step) {
+                    case 1:
+                        if (!$('#form1').formValid()) {
+                            return false;
+                        }
+                        $finish.show();
+                        $next.hide();
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                $finish.hide();
+                $next.show();
+            }
+        });
+        $("#permissionTree").treeview({
+            height: 444,
+            showcheck: true,
+            url: "/SystemManage/RoleAuthorize/GetPermissionTree",
+            param: { roleId: keyValue }
+        });
+    }
+    function submitForm() {
+        var postData = $("#form1").formSerialize();
+        postData["permissionIds"] = String($("#permissionTree").getCheckedNodes());
+        $.submitForm({
+            url: "/SystemManage/Role/SubmitForm?keyValue=" + keyValue,
+            param: postData,
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        });
+    }
+</script>
+<form id="form1">
+    <div class="widget-body">
+        <div id="wizard" class="wizard" data-target="#wizard-steps" style="border-left: none; border-top: none; border-right: none;">
+            <ul class="steps">
+                <li data-target="#step-1" class="active"><span class="step">1</span>角色信息<span class="chevron"></span></li>
+                <li data-target="#step-2"><span class="step">2</span>功能权限<span class="chevron"></span></li>
+            </ul>
+        </div>
+        <div class="step-content" id="wizard-steps" style="border-left: none; border-bottom: none; border-right: none;">
+            <div class="step-pane active" id="step-1" style="margin: 10px; margin-bottom: 0px;">
+                <div class="alert alert-danger" style="text-align: left; margin-bottom: 10px;">
+                    <i class="fa fa-warning alert-dismissible" style="position: relative; top: 1px; font-size: 15px; padding-right: 5px;"></i>
+                    请填写角色信息，用于创建或修改角色信息！
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">表单信息</h3>
+                    </div>
+                    <div class="panel-body" style="width: 98%;">
+                        <table class="form">
+                            <tr>
+                                <th class="formTitle">归属组织</th>
+                                <td class="formValue">
+                                    <select id="F_OrganizeId" name="F_OrganizeId" class="form-control required">
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle">角色名称</th>
+                                <td class="formValue">
+                                    <input id="F_FullName" name="F_FullName" type="text" class="form-control required" placeholder="请输入角色名称" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle">角色编号</th>
+                                <td class="formValue">
+                                    <input id="F_EnCode" name="F_EnCode" type="text" class="form-control required" placeholder="请输入角色编号" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle">角色类型</th>
+                                <td class="formValue">
+                                    <select id="F_Type" name="F_Type" class="form-control required">
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle">显示顺序</th>
+                                <td class="formValue">
+                                    <input id="F_SortCode" name="F_SortCode" type="text" class="form-control required" placeholder="请输入显示顺序" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle" style="height: 35px;">选项</th>
+                                <td class="formValue" style="padding-top: 1px;">
+                                    <div class="ckbox">
+                                        <input id="F_AllowEdit" name="F_AllowEdit" type="checkbox"><label for="F_AllowEdit">允许编辑</label>
+                                    </div>
+                                    <div class="ckbox">
+                                        <input id="F_AllowDelete" name="F_AllowDelete" type="checkbox"><label for="F_AllowDelete">允许删除</label>
+                                    </div>
+                                    <div class="ckbox">
+                                        <input id="F_EnabledMark" name="F_EnabledMark" type="checkbox" checked="checked"><label for="F_EnabledMark">有效</label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th class="formTitle" valign="top" style="padding-top: 5px;">备注
+                                </th>
+                                <td class="formValue">
+                                    <textarea id="F_Description" name="F_Description" class="form-control" style="height: 60px;"></textarea>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="step-pane" id="step-2">
+                <div id="permissionTree"></div>
+            </div>
+        </div>
+        <div class="form-button" id="wizard-actions">
+            <a id="btn_last" disabled class="btn btn-default btn-prev">上一步</a>
+            <a id="btn_next" class="btn btn-default btn-next">下一步</a>
+            <a id="btn_finish" class="btn btn-default" style="display: none;" onclick="submitForm()">完成</a>
+        </div>
+    </div>
+</form>

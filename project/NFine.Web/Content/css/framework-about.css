@@ -1,0 +1,22 @@
+ .weixin{position: fixed;bottom: 20px;right:10px;text-align: center;border: solid 1px #e6e6e6;padding: 10px;background-color: rgb(249, 249, 249);border-radius: 4px;}
+.panel-default{border: none;border-radius: 0px;margin-bottom: 0px;box-shadow: none;-webkit-box-shadow: none;}
+.panel-default > .panel-heading{color: #777;background-color: #fff;border-color: #e6e6e6;padding: 7px 10px;font-weight: 900;}
+.panel-default > .panel-body{padding: 10px;padding-bottom: 0px;}
+.panel-default > .panel-body p{margin: 0px 0px 8px;}
+.contentpay{width: 80%;margin: 0px auto;}
+.hide_box{z-index: 999;filter: alpha(opacity=50);background: #666;opacity: 0.5;-moz-opacity: 0.5;left: 0;top: 0;height: 99%;width: 100%;position: fixed;display: none;}
+.shang_box{width: 540px;height: 540px;padding: 10px;background-color: #fff;border-radius: 10px;position: fixed;z-index: 1000;left: 50%;top: 50%;margin-left: -280px;margin-top: -280px;border: 1px dotted #dedede;display: none;}
+.shang_box img{border: none;border-width: 0;}
+.shang_close{float: right;display: inline-block;}
+.shang_logo{display: block;text-align: center;margin: 20px auto;}
+.shang_tit{width: 100%;height: 75px;text-align: center;line-height: 66px;color: #a3a3a3;font-size: 16px;background: url('../img/cy-reward-title-bg.jpg');font-family: 'Microsoft YaHei';margin-top: 7px;margin-right: 2px;}
+.shang_tit p{color: #a3a3a3;text-align: center;font-size: 16px;}
+.shang_payimg{width: 170px;padding: 10px;border: 6px solid #EA5F00;margin: 0 auto;border-radius: 10px;height: 170px;}
+.shang_payimg img{display: block;text-align: center;width: 140px;height: 140px;}
+.pay_explain{text-align: center;margin: 10px auto;font-size: 12px;color: #545454;}
+.radiobox{width: 16px;height: 16px;background: url('../img/radio2.jpg');display: block;float: left;margin-top: 5px;margin-right: 14px;}
+.checked .radiobox{background: url('../img/radio1.jpg');}
+.shang_payselect{text-align: center;margin: 0 auto;margin-top: 40px;cursor: pointer;height: 60px;width: 280px;}
+.shang_payselect .pay_item{display: inline-block;margin-right: 10px;float: left;}
+.shang_info{clear: both;}
+.shang_info p, .shang_info a{color: #C3C3C3;text-align: center;font-size: 12px;text-decoration: none;line-height: 2em;}

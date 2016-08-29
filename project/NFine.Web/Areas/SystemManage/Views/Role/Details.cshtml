@@ -1,0 +1,152 @@
+﻿@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        initControl();
+        $.ajax({
+            url: "/SystemManage/Role/GetFormJson",
+            data: { keyValue: keyValue },
+            dataType: "json",
+            async: false,
+            success: function (data) {
+                $("#form1").formSerialize(data);
+                $("#form1").find('.form-control,select,input').attr('readonly', 'readonly');
+                $("#form1").find('div.ckbox label').attr('for', '');
+            }
+        });
+    })
+    function initControl() {
+        $("#F_OrganizeId").bindSelect({
+            url: "/SystemManage/Organize/GetTreeSelectJson",
+        });
+        $("#F_Type").bindSelect({
+            url: "/SystemManage/ItemsData/GetSelectJson",
+            param: { enCode: "RoleType" }
+        });
+        $('#wizard').wizard().on('change', function (e, data) {
+            var $next = $("#btn_next");
+            if (data.direction == "next") {
+                switch (data.step) {
+                    case 1:
+                        $next.attr('disabled', 'disabled');
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                $next.removeAttr('disabled');
+            }
+        });
+        $("#permissionTree").treeview({
+            height: 493,
+            showcheck: true,
+            url: "/SystemManage/RoleAuthorize/GetPermissionTree",
+            param: { roleId: keyValue }
+        });
+    }
+</script>
+<form id="form1">
+    <div class="widget-body">
+        <div id="wizard" class="wizard" data-target="#wizard-steps" style="border-left: none; border-top: none; border-right: none;">
+            <ul class="steps">
+                <li data-target="#step-1" class="active"><span class="step">1</span>角色信息<span class="chevron"></span></li>
+                <li data-target="#step-2"><span class="step">2</span>功能权限<span class="chevron"></span></li>
+            </ul>
+        </div>
+        <div class="step-content" id="wizard-steps" style="border-left: none; border-bottom: none; border-right: none;">
+            <div class="step-pane active" id="step-1" style="padding-left: 5px; padding-top: 20px; margin-right: 20px;">
+                <table class="form">
+                    <tr>
+                        <th class="formTitle">归属组织</th>
+                        <td class="formValue">
+                            <select id="F_OrganizeId" name="F_OrganizeId" class="form-control required">
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">角色名称</th>
+                        <td class="formValue">
+                            <input id="F_FullName" name="F_FullName" type="text" class="form-control required" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">角色编号</th>
+                        <td class="formValue">
+                            <input id="F_EnCode" name="F_EnCode" type="text" class="form-control required" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">角色类型</th>
+                        <td class="formValue">
+                            <select id="F_Type" name="F_Type" class="form-control required">
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">显示顺序</th>
+                        <td class="formValue">
+                            <input id="F_SortCode" name="F_SortCode" type="text" class="form-control required" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle" style="height: 35px;">选项</th>
+                        <td class="formValue" style="padding-top: 1px;">
+                            <div class="ckbox">
+                                <input id="F_AllowEdit" name="F_AllowEdit" type="checkbox"><label for="F_AllowEdit">允许编辑</label>
+                            </div>
+                            <div class="ckbox">
+                                <input id="F_AllowDelete" name="F_AllowDelete" type="checkbox"><label for="F_AllowDelete">允许删除</label>
+                            </div>
+                            <div class="ckbox">
+                                <input id="F_EnabledMark" name="F_EnabledMark" type="checkbox" checked="checked"><label for="F_EnabledMark">有效</label>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle" valign="top" style="padding-top: 5px;">备注
+                        </th>
+                        <td class="formValue">
+                            <textarea id="F_Description" name="F_Description" class="form-control" style="height: 60px;"></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">创建人员</th>
+                        <td class="formValue">
+                            <input id="F_CreatorUserId" name="F_CreatorUserId" type="text" class="form-control" />
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <th class="formTitle">创建时间</th>
+                        <td class="formValue">
+                            <input id="F_CreatorTime" name="F_CreatorTime" type="text" class="form-control" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="formTitle">修改人员</th>
+                        <td class="formValue">
+                            <input id="F_LastModifyUserId" name="F_LastModifyUserId" type="text" class="form-control" />
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <th class="formTitle">修改时间</th>
+                        <td class="formValue">
+                            <input id="F_LastModifyTime" name="F_LastModifyTime" type="text" class="form-control" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="step-pane" id="step-2">
+                <div id="permissionTree"></div>
+            </div>
+        </div>
+        <div class="form-button" id="wizard-actions">
+            <a id="btn_last" disabled class="btn btn-default btn-prev">上一步</a>
+            <a id="btn_next" class="btn btn-default btn-next">下一步</a>
+        </div>
+    </div>
+</form>

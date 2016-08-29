@@ -1,0 +1,157 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>
+    var moduleId = $.request("moduleId");
+    $(function () {
+        gridList();
+    })
+    function gridList() {
+        $("#gridList").dataGrid({
+            treeGrid: true,
+            treeGridModel: "adjacency",
+            ExpandColumn: "F_Location",
+            url: "/SystemManage/ModuleButton/GetTreeGridJson?moduleId=" + moduleId,
+            height: $(window).height() - 90,
+            colModel: [
+                { label: "主键", name: "F_Id", hidden: true, key: true },
+                { label: '名称', name: 'F_FullName', width: 150, align: 'left' },
+                {
+                    label: '位置', name: 'F_Location', width: 80, align: 'left',
+                    formatter: function (cellvalue) {
+                        if (cellvalue == 1) {
+                            return "初始";
+                        } else {
+                            return "选中";
+                        }
+                    }
+                },
+                { label: '事件', name: 'F_JsEvent', width: 150, align: 'left' },
+                { label: '连接', name: 'F_UrlAddress', width: 270, align: 'left' },
+                {
+                    label: "分开", name: "F_Split", width: 60, align: "center",
+                    formatter: function (cellvalue) {
+                        return cellvalue == true ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
+                    }
+                },
+                {
+                    label: "公共", name: "F_IsPublic", width: 60, align: "center",
+                    formatter: function (cellvalue) {
+                        return cellvalue == true ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
+                    }
+                },
+                {
+                    label: "有效", name: "F_EnabledMark", width: 60, align: "center", autowidth: false,
+                    formatter: function (cellvalue) {
+                        return cellvalue == 1 ? "<i class=\"fa fa-toggle-on\"></i>" : "<i class=\"fa fa-toggle-off\"></i>";
+                    }
+                }
+            ]
+        });
+    }
+    function btn_add() {
+        $.modalOpen({
+            id: "Form",
+            title: "新增按钮",
+            url: "/SystemManage/ModuleButton/Form?moduleId=" + moduleId,
+            width: "700px",
+            height: "440px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+    }
+    function btn_edit() {
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        $.modalOpen({
+            id: "Form",
+            title: "修改按钮",
+            url: "/SystemManage/ModuleButton/Form?moduleId=" + moduleId + "&keyValue=" + keyValue,
+            width: "700px",
+            height: "440px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+    }
+    function btn_delete() {
+        $.deleteForm({
+            url: "/SystemManage/ModuleButton/DeleteForm",
+            param: { keyValue: $("#gridList").jqGridRowValue().F_Id },
+            success: function () {
+                $("#gridList").resetSelection();
+                $("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+    function btn_details() {
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        $.modalOpen({
+            id: "Details",
+            title: "查看按钮",
+            url: "/SystemManage/ModuleButton/Details?moduleId=" + moduleId + "&keyValue=" + keyValue,
+            width: "700px",
+            height: "490px",
+            btn: null,
+        });
+    }
+    function btn_clonebutton() {
+        $.modalOpen({
+            id: "CloneButton",
+            title: "克隆按钮",
+            url: "/SystemManage/ModuleButton/CloneButton?moduleId=" + moduleId,
+            width: "400px",
+            height: "600px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+    }
+</script>
+<div class="topPanel" style="border: 0px;">
+    <div class="search">
+        <table>
+            <tr>
+                <td>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn  btn-primary"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="toolbar">
+        <div class="btn-group">
+            <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
+        </div>
+        <div class="btn-group">
+            <a class="btn btn-primary" onclick="btn_add()"><i class="fa fa-plus"></i>新建按钮</a>
+        </div>
+        <div class="btn-group">
+            <a class="btn btn-primary" onclick="btn_clonebutton()"><i class="fa fa-paste"></i>克隆按钮</a>
+        </div>
+        <div class="operate">
+            <ul class="nav nav-pills">
+                <li class="first">已选中<span>1</span>项</li>
+                <li><a onclick="btn_edit()"><i class="fa fa-pencil-square-o"></i>修改按钮</a></li>
+                <li><a onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除按钮</a></li>
+                <li><a onclick="btn_details()"><i class="fa fa-search-plus"></i>查看按钮</a></li>
+            </ul>
+            <a href="javascript:;" class="close"></a>
+        </div>
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridList"></table>
+    <style>
+        .ui-jqgrid {
+            border-left: 0px;
+            border-right: 0px;
+            border-bottom: 0px;
+        }
+    </style>
+</div>

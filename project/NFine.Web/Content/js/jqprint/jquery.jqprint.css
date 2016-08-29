@@ -1,0 +1,12 @@
+﻿@media print{@page{margin:.5cm;}
+html,body{font-family:Arial,Helvetica,Verdana,sans-serif !important;-webkit-font-smoothing:antialiased;overflow-x:hidden;font-size:12px;color: #444;}
+.price-title{font-size: 30px;text-align: center;font-weight: bold;}
+.price-subtitle{text-align: center;}
+.price-info{margin-top:20px;margin-bottom:20px;}
+.price-info table{width:100%;margin:0px;padding:0px;border-collapse:collapse;border-width:3px 1px 1px;table-layout:fixed}
+.price-info table .formTitle{position:relative;left:0px;white-space:nowrap;font-weight:normal;text-align:left;width:50px;font-size: 12px;}
+.price-info table .formValue{text-align:left;font-size: 12px;}
+.price-info table .formValue input{border-top:none;border-right:none;border-left:none;border-bottom: 1px solid #666;height:22px!important;line-height:22px!important;font-size: 12px;width:100%;}
+.price-table table{margin: 0px;margin-top:1px;border-collapse: collapse;width: 100%;border-left: 1px solid #666;}
+.price-table table thead tr td{border-top: 1px solid #666;border-bottom: 1px solid #666;border-right: 1px solid #666;padding-top:5px;padding-bottom:5px;text-overflow:ellipsis;word-break:keep-all;overflow:hidden;font-weight:bold;padding-left:5px;font-size: 12px;width:auto;}
+.price-table table tbody tr td{border-bottom: 1px solid #666;border-right: 1px solid #666;height:25px;line-height:25px;word-break: break-all;padding-left:5px;font-size: 12px;width:auto;}

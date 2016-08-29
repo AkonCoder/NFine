@@ -1,0 +1,107 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>
+    $(function () {
+        gridList();
+    })
+    function gridList() {
+        var $gridList = $("#gridList");
+        $gridList.dataGrid({
+            url: "/SystemSecurity/Log/GetGridJson",
+            height: $(window).height() - 128,
+            colModel: [
+                { label: '主键', name: 'F_Id', hidden: true },
+                {
+                    label: '日期', name: 'F_Date', width: 120, align: 'left',
+                    formatter: "date", formatoptions: { srcformat: 'Y-m-d H:i:s', newformat: 'Y-m-d H:i:s' }
+                },
+                { label: '账户', name: 'F_Account', width: 80, align: 'left' },
+                { label: '姓名', name: 'F_NickName', width: 80, align: 'left' },
+                { label: '操作菜单', name: 'F_ModuleName', width: 100, align: 'left' },
+                {
+                    label: '操作类型', name: 'F_Type', width: 80, align: 'left',
+                    formatter: function (cellvalue) {
+                        return top.clients.dataItems["DbLogType"][cellvalue] == undefined ? "" : top.clients.dataItems["DbLogType"][cellvalue]
+                    }
+                },
+                {
+                    label: 'IP地址', name: 'F_IPAddress', width: 230, align: 'left',
+                    formatter: function (cellvalue, options, rowObject) {
+                        return cellvalue + ";" + rowObject.F_IPAddressName;
+                    }
+                },
+                { label: '日志内容', name: 'F_Description', width: 300, align: 'left' }
+            ],
+            pager: "#gridPager",
+            sortname: 'F_Date desc',
+            viewrecords: true
+        });
+        $("#time_horizon a.btn-default").click(function () {
+            $("#time_horizon a.btn-default").removeClass("active");
+            $(this).addClass("active");
+            $('#btn_search').trigger("click");
+        });
+        $("#btn_search").click(function () {
+            var timeType = $("#time_horizon a.active").attr('data-value');
+            var queryJson = {
+                keyword: $("#txt_keyword").val(),
+                timeType: $("#time_horizon a.active").attr('data-value'),
+            }
+            $gridList.jqGrid('setGridParam', {
+                postData: { queryJson: JSON.stringify(queryJson) },
+            }).trigger('reloadGrid');
+        });
+    }
+    function btn_removelog() {
+        $.modalOpen({
+            id: "removelog",
+            title: "清空日志",
+            url: "/SystemSecurity/Log/RemoveLog",
+            width: "400px",
+            height: "180px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+    }
+</script>
+
+<div class="topPanel">
+    <div class="toolbar">
+        <div class="btn-group">
+            <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
+        </div>
+        <div class="btn-group">
+            <a id="NF-removelog" authorize="yes" class="btn btn-primary dropdown-text" onclick="btn_removelog()"><i class="fa fa-eraser"></i>清空日志</a>
+        </div>
+        <script>$('.toolbar').authorizeButton()</script>
+    </div>
+    <div class="search">
+        <table>
+            <tr>
+                <td>
+                    <div class="input-group">
+                        <input id="txt_keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;">
+                        <span class="input-group-btn">
+                            <button id="btn_search" type="button" class="btn  btn-primary"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </td>
+                <td style="padding-left: 10px;">
+                    <div id="time_horizon" class="btn-group">
+                        <a class="btn btn-default" data-value="1">今天</a>
+                        <a class="btn btn-default active" data-value="2">近7天</a>
+                        <a class="btn btn-default" data-value="3">近1个月</a>
+                        <a class="btn btn-default" data-value="4">近3个月</a>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridList"></table>
+    <div id="gridPager"></div>
+</div>

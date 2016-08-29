@@ -1,0 +1,55 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script src="~/Content/js/qrcode/jquery.qrcode.js"></script>
+<script src="~/Content/js/qrcode/qrcode.js"></script>
+<script>
+    $(function () {
+        $('#qrcodeTable').qrcode({
+            render: "table",
+            text: "http://www.nfine.cn",
+            width: "265",
+            height: "265"
+        });
+    });
+    function createqrcode() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        $("#qrcodeTable").html("");
+        $('#qrcodeTable').qrcode({
+            render: "table",
+            text: $("#txt_barcod").val(),
+            width: "265",
+            height: "265"
+        });
+    }
+</script>
+<form id="form1">
+    <div class="mail-box">
+        <div class="mail-header">生成二维码</div>
+        <div class="mail-body">
+            <table class="form">
+                <tr>
+                    <th class="formTitle">二维码内容</th>
+                    <td class="formValue">
+                        <div class="input-group">
+                            <input id="txt_barcod" name="txt_barcod" type="text" class="form-control required" placeholder="请输入要生成二维码的字符串">
+                            <span class="input-group-btn">
+                                <a onclick="createqrcode()" class="btn  btn-primary" style="padding-left:10px;padding-right:10px;font-size:12px;line-height: 20px;">生成</a>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="formTitle" valign="top" style="padding-top:25px;">二维码图像</th>
+                    <td class="formValue" style="padding-top:20px;">
+                        <div id="qrcodeTable"></div>
+                        <div style="color: #aaaaaa;margin-top:10px;">使用微信扫一扫</div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</form>

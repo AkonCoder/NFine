@@ -1,0 +1,103 @@
+﻿@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        $("#F_Type").bindSelect()
+        if (!!keyValue) {
+            $.ajax({
+                url: "/SystemSecurity/FilterIP/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                }
+            });
+        }
+    });
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        var StartIP = $("#F_StartIP").val();
+        var EndIP = $("#F_EndIP").val();
+        if (compareIP(StartIP, EndIP) == -1) {
+            $.modalMsg("不在同一个网段内");
+            return false;
+        }
+        if (compareIP(StartIP, EndIP) == 0) {
+            $.modalMsg("结束IP不能大于开始IP");
+            return false;
+        }
+        $.submitForm({
+            url: "/SystemSecurity/FilterIP/SubmitForm?keyValue=" + keyValue,
+            param: $("#form1").formSerialize(),
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+    function compareIP(ipBegin, ipEnd) {
+        var temp1 = ipBegin.split(".");
+        var temp2 = ipEnd.split(".");
+        if ((temp1[0] + temp1[1] + temp1[2]) == (temp2[0] + temp2[1] + temp2[2])) {
+            if (temp2[3] >= temp1[3]) {
+                return 1;
+            } else {
+                return 0;
+            }
+        } else {
+            return -1;//不在同一个网段内
+        }
+    }
+</script>
+
+<form id="form1">
+    <div style="margin-bottom: 0px; border-radius: 0px;" class="alert alert-warning alert-dismissable">
+        <strong>注意：</strong>&nbsp;IP地址格式：192.168.0.1；192.168.0.*
+    </div>
+    <div style="padding-top: 20px; margin-right: 20px;">
+        <table class="form">
+            <tr>
+                <th class="formTitle">策略类型</th>
+                <td class="formValue">
+                    <select id="F_Type" name="F_Type" class="form-control required">
+                        <option value="">==请选择==</option>
+                        <option value="true">允许访问</option>
+                        <option value="false">拒绝访问</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">起始IP</th>
+                <td class="formValue">
+                    <input id="F_StartIP" name="F_StartIP" type="text" class="form-control required ip" placeholder="请输入IP地址(IPv4/IPv6)" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">结束IP</th>
+                <td class="formValue">
+                    <input id="F_EndIP" name="F_EndIP" type="text" class="form-control required ip" placeholder="请输入IP地址(IPv4/IPv6)" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle" style="height: 35px;">选项</th>
+                <td class="formValue" style="padding-top: 1px;">
+                    <div class="ckbox">
+                        <input id="F_EnabledMark" name="F_EnabledMark" type="checkbox" checked="checked"><label for="F_EnabledMark">有效</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle" valign="top" style="padding-top: 11px;">备注
+                </th>
+                <td class="formValue">
+                    <textarea id="F_Description" name="F_Description" class="form-control" style="height: 60px;"></textarea>
+                </td>
+            </tr>
+        </table>
+    </div>
+</form>

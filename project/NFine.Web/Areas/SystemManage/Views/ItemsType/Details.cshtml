@@ -1,0 +1,97 @@
+﻿@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    $(function () {
+        $("#F_ParentId").bindSelect({
+            url: "/SystemManage/ItemsType/GetTreeSelectJson"
+        });
+        if (!!keyValue) {
+            $.ajax({
+                url: "/SystemManage/ItemsType/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                    $("#form1").find('.form-control,select,input').attr('readonly', 'readonly');
+                    $("#form1").find('div.ckbox label').attr('for', '');
+                }
+            });
+        }
+    });
+</script>
+
+<form id="form1">
+    <div style="padding-top: 20px; margin-right: 20px;">
+        <table class="form">
+            <tr>
+                <th class="formTitle">上级</th>
+                <td class="formValue">
+                    <select id="F_ParentId" name="F_ParentId" class="form-control">
+                        <option value="0">父节点</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">名称</th>
+                <td class="formValue">
+                    <input id="F_FullName" name="F_FullName" type="text" class="form-control" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">编号</th>
+                <td class="formValue">
+                    <input id="F_EnCode" name="F_EnCode" type="text" class="form-control" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">排序</th>
+                <td class="formValue">
+                    <input id="F_SortCode" name="F_SortCode" type="text" class="form-control" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle" style="height: 35px;">选项</th>
+                <td class="formValue" style="padding-top: 1px;">
+                    <div class="ckbox">
+                        <input id="F_EnabledMark" name="F_EnabledMark" type="checkbox" checked="checked"><label for="F_EnabledMark">有效</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle" valign="top" style="padding-top: 5px;">备注
+                </th>
+                <td class="formValue">
+                    <textarea id="F_Description" name="F_Description" class="form-control" style="height: 60px;"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">创建人员</th>
+                <td class="formValue">
+                    <input id="F_CreatorUserId" name="F_CreatorUserId" type="text" class="form-control" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">创建时间</th>
+                <td class="formValue">
+                    <input id="F_CreatorTime" name="F_CreatorTime" type="text" class="form-control" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">修改人员</th>
+                <td class="formValue">
+                    <input id="F_LastModifyUserId" name="F_LastModifyUserId" type="text" class="form-control" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">修改时间</th>
+                <td class="formValue">
+                    <input id="F_LastModifyTime" name="F_LastModifyTime" type="text" class="form-control" />
+                </td>
+            </tr>
+        </table>
+    </div>
+</form>

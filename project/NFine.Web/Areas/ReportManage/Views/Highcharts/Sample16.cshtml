@@ -1,0 +1,259 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>流程图</title>
+    <link href="~/Content/css/framework-theme.css" rel="stylesheet" />
+    <script src="~/Content/js/jquery/jquery-2.1.1.min.js"></script>
+    <script src="~/Content/js/highcharts/highcharts.js"></script>
+    <script>
+        $(function () {
+            var chart = new Highcharts.Chart({
+                chart: {
+                    renderTo: 'container',
+                    events: {
+                        load: function () {
+
+                            // Draw the flow chart
+                            var ren = this.renderer,
+                                colors = Highcharts.getOptions().colors,
+                                rightArrow = ['M', 0, 0, 'L', 100, 0, 'L', 95, 5, 'M', 100, 0, 'L', 95, -5],
+                                leftArrow = ['M', 100, 0, 'L', 0, 0, 'L', 5, 5, 'M', 0, 0, 'L', 5, -5];
+
+
+
+                            // Separator, client from service
+                            ren.path(['M', 120, 40, 'L', 120, 330])
+                                .attr({
+                                    'stroke-width': 2,
+                                    stroke: 'silver',
+                                    dashstyle: 'dash'
+                                })
+                                .add();
+
+                            // Separator, CLI from service
+                            ren.path(['M', 420, 40, 'L', 420, 330])
+                                .attr({
+                                    'stroke-width': 2,
+                                    stroke: 'silver',
+                                    dashstyle: 'dash'
+                                })
+                                .add();
+
+                            // Headers
+                            ren.label('Web客户端', 20, 40)
+                                .css({
+                                    fontWeight: 'bold'
+                                })
+                                .add();
+                            ren.label('Web服务器', 220, 40)
+                                .css({
+                                    fontWeight: 'bold'
+                                })
+                                .add();
+                            ren.label('命令行客户端', 440, 40)
+                                .css({
+                                    fontWeight: 'bold'
+                                })
+                                .add();
+
+                            // SaaS client label
+                            ren.label('SaaS客户端<br/>(浏览器或脚本)', 0, 90)
+                                .attr({
+                                    fill: colors[0],
+                                    stroke: 'white',
+                                    'stroke-width': 2,
+                                    padding: 5,
+                                    r: 5
+                                })
+                                .css({
+                                    color: 'white'
+                                })
+                                .add()
+                                .shadow(true);
+
+                            // Arrow from SaaS client to Phantom JS
+                            ren.path(rightArrow)
+                                 .attr({
+                                     'stroke-width': 2,
+                                     stroke: colors[3]
+                                 })
+                                .translate(95, 95)
+                                .add();
+
+                            ren.label('以JSON方式传递选项', 90, 75)
+                                .css({
+                                    color: colors[3]
+                                })
+                                .add();
+
+                            ren.label('脚本', 210, 82)
+                                .attr({
+                                    stroke: 'white',
+                                    'stroke-width': 2,
+                                    padding: 5,
+                                    r: 5,
+                                    width: 100,
+                                    fill: colors[1]
+                                })
+                                .css({
+                                    color: 'white'
+                                })
+                                .add()
+                                .shadow(true);
+
+                            // Arrow from Phantom JS to Batik
+                            ren.path(['M', 250, 110, 'L', 250, 185, 'L', 245, 180, 'M', 250, 185, 'L', 255, 180])
+                                 .attr({
+                                     'stroke-width': 2,
+                                     stroke: colors[3]
+                                 })
+                                 .add();
+
+                            ren.label('SVG', 255, 120)
+                                .css({
+                                    color: colors[3]
+                                })
+                                .add();
+
+                            ren.label('得到SVG', 210, 200)
+                                .attr({
+                                    stroke: 'white',
+                                    'stroke-width': 2,
+                                    padding: 5,
+                                    r: 5,
+                                    width: 100,
+                                    fill: colors[1]
+                                })
+                                .css({
+                                    color: 'white'
+                                })
+                                .add()
+                                .shadow(true);
+
+                            // Arrow from Batik to SaaS client
+                            ren.path(['M', 235, 185, 'L', 235, 155, 'C', 235, 130, 235, 130, 215, 130,
+                                      'L', 95, 130, 'L', 100, 125, 'M', 95, 130, 'L', 100, 135])
+                                 .attr({
+                                     'stroke-width': 2,
+                                     stroke: colors[3]
+                                 })
+                                 .add();
+
+                            ren.label('得到图像', 100, 110)
+                                .css({
+                                    color: colors[3]
+                                })
+                                .add();
+
+                            // Browser label
+                            ren.label('运行', 30, 200)
+                                .attr({
+                                    fill: colors[0],
+                                    stroke: 'white',
+                                    'stroke-width': 2,
+                                    padding: 5,
+                                    r: 5
+                                })
+                                .css({
+                                    color: 'white',
+                                    width: '100px'
+                                })
+                                .add()
+                                .shadow(true);
+
+
+
+                            // Arrow from Browser to Batik
+                            ren.path(rightArrow)
+                                 .attr({
+                                     'stroke-width': 2,
+                                     stroke: colors[1]
+                                 })
+                                .translate(95, 205)
+                                 .add();
+
+                            ren.label('传递SVG', 110, 185)
+                                .css({
+                                    color: colors[1]
+                                })
+                                .add();
+
+                            // Arrow from Batik to Browser
+                            ren.path(leftArrow)
+                                 .attr({
+                                     'stroke-width': 2,
+                                     stroke: colors[1]
+                                 })
+                                .translate(95, 215)
+                                 .add();
+
+                            ren.label('得到图像', 100, 215)
+                                .css({
+                                    color: colors[1]
+                                })
+                                .add();
+
+                            // Script label
+                            ren.label('脚本', 450, 82)
+                                .attr({
+                                    fill: colors[2],
+                                    stroke: 'white',
+                                    'stroke-width': 2,
+                                    padding: 5,
+                                    r: 5
+                                })
+                                .css({
+                                    color: 'white',
+                                    width: '100px'
+                                })
+                                .add()
+                                .shadow(true);
+
+                            // Arrow from Script to PhantomJS
+                            ren.path(leftArrow)
+                                 .attr({
+                                     'stroke-width': 2,
+                                     stroke: colors[2]
+                                 })
+                                .translate(330, 90)
+                                 .add();
+
+                            ren.label('命令', 340, 70)
+                                .css({
+                                    color: colors[2]
+                                })
+                                .add();
+
+                            // Arrow from PhantomJS to Script
+                            ren.path(rightArrow)
+                                 .attr({
+                                     'stroke-width': 2,
+                                     stroke: colors[2]
+                                 })
+                                .translate(330, 100)
+                                 .add();
+
+                            ren.label('得到图像', 330, 100)
+                                .css({
+                                    color: colors[2]
+                                })
+                                .add();
+
+
+                        }
+                    }
+                },
+                title: {
+                    text: '自定义流程图'
+                }
+
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="container" style="width: 600px; height: 250px; margin: 0 auto"></div>
+</body>
+</html>

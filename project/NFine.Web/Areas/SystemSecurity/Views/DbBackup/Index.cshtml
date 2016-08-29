@@ -1,0 +1,125 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Index.cshtml";
+}
+<script>
+    $(function () {
+        gridList();
+    })
+    function gridList() {
+        var $gridList = $("#gridList");
+        $gridList.dataGrid({
+            url: "/SystemSecurity/DbBackup/GetGridJson",
+            height: $(window).height() - 96,
+            colModel: [
+                { label: "主键", name: "F_Id", hidden: true, key: true },
+                { label: '数据库名', name: 'F_DbName', width: 100, align: 'left' },
+                { label: '备份名称', name: 'F_FileName', width: 200, align: 'left' },
+                { label: '大小', name: 'F_FileSize', width: 100, align: 'left' },
+                {
+                    label: '备份模式', name: 'F_BackupType', width: 100, align: 'left',
+                    formatter: function (cellvalue) {
+                        if (cellvalue == "1") {
+                            return "完整备份";
+                        } else if (cellvalue == "2") {
+                            return "差异备份";
+                        }
+                    }
+                },
+                {
+                    label: '备份时间', name: 'F_CreatorTime', width: 100, align: 'left',
+                    formatter: "date", formatoptions: { srcformat: 'Y-m-d H:i', newformat: 'Y-m-d H:i' }
+                },
+                { label: '备份人员', name: 'F_CreatorUserId', width: 100, align: 'left' },
+                { label: '备份说明', name: 'F_Description', width: 300, align: 'left' }
+            ]
+        });
+        $("#txt_condition .dropdown-menu li").click(function () {
+            var text = $(this).find('a').html();
+            var value = $(this).find('a').attr('data-value');
+            $("#txt_condition .dropdown-text").html(text).attr('data-value', value)
+        });
+        $("#btn_search").click(function () {
+            var queryJson = {
+                condition: $("#txt_condition").find('.dropdown-text').attr('data-value'),
+                keyword: $("#txt_keyword").val()
+            }
+            $gridList.jqGrid('setGridParam', {
+                postData: { queryJson: JSON.stringify(queryJson) },
+            }).trigger('reloadGrid');
+        });
+    }
+    function btn_add() {
+        $.modalOpen({
+            id: "Form",
+            title: "新增备份",
+            url: "/SystemSecurity/DbBackup/Form",
+            width: "450px",
+            height: "360px",
+            callBack: function (iframeId) {
+                top.frames[iframeId].submitForm();
+            }
+        });
+    }
+    function btn_delete() {
+        $.deleteForm({
+            url: "/SystemSecurity/DbBackup/DeleteForm",
+            param: { keyValue: $("#gridList").jqGridRowValue().F_Id },
+            success: function () {
+                $.currentWindow().$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+    function btn_download() {
+        var keyValue = $("#gridList").jqGridRowValue().F_Id;
+        $.download("/SystemSecurity/DbBackup/DownloadBackup", "keyValue=" + keyValue, 'post');
+    }
+</script>
+
+<div class="topPanel">
+    <div class="toolbar">
+        <div class="btn-group">
+            <a class="btn btn-primary" onclick="$.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
+        </div>
+        <div class="btn-group">
+            <a id="NF-add" authorize="yes" class="btn btn-primary dropdown-text" onclick="btn_add()"><i class="fa fa-plus"></i>新建备份</a>
+        </div>
+        <div class="operate">
+            <ul class="nav nav-pills">
+                <li class="first">已选中<span>1</span>项</li>
+                <li><a id="NF-delete" authorize="yes" onclick="btn_delete()"><i class="fa fa-trash-o"></i>删除备份</a></li>
+                <li class="split"></li>
+                <li><a id="NF-download" authorize="yes" onclick="btn_download()"><i class="fa fa-cloud-download"></i>下载备份</a></li>
+            </ul>
+            <a href="javascript:;" class="close"></a>
+        </div>
+        <script>$('.toolbar').authorizeButton()</script>
+    </div>
+    <div class="search">
+        <table>
+            <tr>
+                <td>
+                    <div id="txt_condition" class="btn-group">
+                        <a class="btn btn-default dropdown-text" data-toggle="dropdown">选择条件</a>
+                        <a class="btn btn-default dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="javascript:void()" data-value="DbName">数据库名</a></li>
+                            <li><a href="javascript:void()" data-value="FileName">备份名称</a></li>
+                        </ul>
+                    </div>
+                </td>
+                <td style="padding-left: 2px;">
+                    <div class="input-group">
+                        <input id="txt_keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;">
+                        <span class="input-group-btn">
+                            <button id="btn_search" type="button" class="btn  btn-primary"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<div class="gridPanel">
+    <table id="gridList"></table>
+</div>

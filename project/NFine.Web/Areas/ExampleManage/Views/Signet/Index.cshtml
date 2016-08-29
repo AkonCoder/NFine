@@ -1,0 +1,194 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<link href="~/Content/js/zsign/jquery.zsign.css" rel="stylesheet" />
+<script src="~/Content/js/zsign/jquery.zsign.js"></script>
+<script>
+    $(function () {
+        top.$(".content-iframe").css("background-color", "#f9f9f9");
+        $(".price-box").zSign({ img: '/Content/js/zsign/signet.gif' });
+    })
+</script>
+<div class="price-box">
+    <div class="price-title">
+        上海东鞋贸易有限公司	
+    </div>
+    <div class="price-subtitle">
+        <p>上海市浦东新区世纪大道100号</p>
+        <p>电话：021-85154668&nbsp;&nbsp;传真：021-85154668</p>
+    </div>
+    <div class="price-title">
+        报&nbsp;&nbsp;价&nbsp;&nbsp;单
+    </div>
+    <div class="price-info">
+        <table class="form">
+            <tr>
+                <th class="formTitle">公&nbsp;&nbsp;&nbsp;&nbsp;司：</th>
+                <td class="formValue" style="padding-right: 20px;">
+                    <input type="text" class="form-control" value="中国节能环保集团公司" />
+                </td>
+                <th class="formTitle">联系人：</th>
+                <td class="formValue">
+                    <input type="text" class="form-control" value="南天亮" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">电&nbsp;&nbsp;&nbsp;&nbsp;话：</th>
+                <td class="formValue" style="padding-right: 20px;">
+                    <input type="text" class="form-control " value="0592-88888888" />
+                </td>
+                <th class="formTitle">传&nbsp;&nbsp;&nbsp;&nbsp;真：</th>
+                <td class="formValue">
+                    <input type="text" class="form-control " value="0592-88888886" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">邮&nbsp;&nbsp;&nbsp;&nbsp;箱：</th>
+                <td class="formValue" style="padding-right: 20px;">
+                    <input type="text" class="form-control" />
+                </td>
+                <th class="formTitle">地&nbsp;&nbsp;&nbsp;&nbsp;址：</th>
+                <td class="formValue">
+                    <input type="text" class="form-control " value="北京市海淀区西直门北大街42号" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">报价人：</th>
+                <td class="formValue" style="padding-right: 20px;">
+                    <input type="text" class="form-control " value="李天福" />
+                </td>
+                <th class="formTitle">日&nbsp;&nbsp;&nbsp;&nbsp;期：</th>
+                <td class="formValue">
+                    <input type="text" class="form-control "  value="@NFine.Code.Ext.ToDateString()"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="price-table">
+        <table>
+            <thead>
+                <tr>
+                    <td style="width: 2%;">编号</td>
+                    <td style="width: 25%;">品名</td>
+                    <td style="width: 10%;">规格</td>
+                    <td style="width: 10%;">数量</td>
+                    <td style="width: 10%;">单位</td>
+                    <td style="width: 10%;">单价</td>
+                    <td style="width: 10%;">金额</td>
+                    <td>备注</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>服务器硬件</td>
+                    <td>联想</td>
+                    <td>5</td>
+                    <td>台</td>
+                    <td>20000.00</td>
+                    <td>100000.00</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>数据库正版</td>
+                    <td>SQLServer</td>
+                    <td>5</td>
+                    <td>套</td>
+                    <td>9998.00</td>
+                    <td>49990.00</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>OA内部管理系统</td>
+                    <td>定制</td>
+                    <td>1</td>
+                    <td>套</td>
+                    <td>390000.00</td>
+                    <td>390000.00</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>进销存管理系统</td>
+                    <td>定制</td>
+                    <td>1</td>
+                    <td>套</td>
+                    <td>260000.00</td>
+                    <td>260000.00</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>服务费</td>
+                    <td>&nbsp;</td>
+                    <td>1</td>
+                    <td>年</td>
+                    <td>80000.00</td>
+                    <td>80000.00</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>差旅费用</td>
+                    <td>&nbsp;</td>
+                    <td>1</td>
+                    <td>年</td>
+                    <td>60000.00</td>
+                    <td>80000.00</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td colspan="7" style="text-align: right; border-right: none;">币种：人民币&nbsp;&nbsp;&nbsp;&nbsp;总计：959990.00
+                    </td>
+                    <td>&nbsp;</td>
+                </tr>
+                <tr>
+                    <td style="height: 80px;">备注</td>
+                    <td colspan="7"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="price-info">
+        <table class="form">
+            <tr>
+                <th class="formTitle">日&nbsp;&nbsp;&nbsp;&nbsp;期：</th>
+                <td class="formValue">
+                    <input type="text" class="form-control" style="width: 150px" />
+                </td>
+            </tr>
+        </table>
+        <table class="form">
+            <tr>
+                <th class="formTitle">签&nbsp;&nbsp;&nbsp;&nbsp;字：</th>
+                <td class="formValue">
+                    <input type="text" class="form-control" style="width: 150px" />
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+

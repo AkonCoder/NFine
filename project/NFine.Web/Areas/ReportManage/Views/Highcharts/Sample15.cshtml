@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>蜡烛图</title>
+    <link href="~/Content/css/framework-theme.css" rel="stylesheet" />
+    <script src="~/Content/js/jquery/jquery-2.1.1.min.js"></script>
+    <script src="~/Content/js/highcharts/highcharts.js"></script>
+    <script>
+        $(function () {
+            $('#container').highcharts({
+
+                chart: {
+                    type: 'boxplot'
+                },
+
+                title: {
+                    text: '蜡烛图'
+                },
+
+                legend: {
+                    enabled: false
+                },
+
+                xAxis: {
+                    categories: ['1', '2', '3', '4', '5'],
+                    title: {
+                        text: '横坐标'
+                    }
+                },
+
+                yAxis: {
+                    title: {
+                        text: '纵坐标'
+                    },
+                    plotLines: [{
+                        value: 932,
+                        color: 'red',
+                        width: 1,
+                        label: {
+                            text: 'Theoretical mean: 932',
+                            align: 'center',
+                            style: {
+                                color: 'gray'
+                            }
+                        }
+                    }]
+                },
+
+                series: [{
+                    name: 'Observations',
+                    data: [
+                        [760, 801, 848, 895, 965],
+                        [733, 853, 939, 980, 1080],
+                        [714, 762, 817, 870, 918],
+                        [724, 802, 806, 871, 950],
+                        [834, 836, 864, 882, 910]
+                    ],
+                    tooltip: {
+                        headerFormat: '<em>Experiment No {point.key}</em><br/>'
+                    }
+                }, {
+                    name: 'Outlier',
+                    color: Highcharts.getOptions().colors[0],
+                    type: 'scatter',
+                    data: [ // x, y positions where 0 is the first category
+                        [0, 644],
+                        [4, 718],
+                        [4, 951],
+                        [4, 969]
+                    ],
+                    marker: {
+                        fillColor: 'white',
+                        lineWidth: 1,
+                        lineColor: Highcharts.getOptions().colors[0]
+                    },
+                    tooltip: {
+                        pointFormat: 'Observation: {point.y}'
+                    }
+                }]
+
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="container" style="height: 400px; margin: auto; width: 600px"></div>
+</body>
+</html>

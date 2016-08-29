@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>漏斗图</title>
+    <link href="~/Content/css/framework-theme.css" rel="stylesheet" />
+    <script src="~/Content/js/jquery/jquery-2.1.1.min.js"></script>
+    <script src="~/Content/js/highcharts/highcharts.js"></script>
+    <script>
+        $(function () {
+            $('#container').highcharts({
+                chart: {
+                    type: 'funnel',
+                    marginRight: 100
+                },
+                title: {
+                    text: '漏斗图',
+                    x: -50
+                },
+                plotOptions: {
+                    series: {
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b> ({point.y:,.0f})',
+                            color: 'black',
+                            softConnector: true
+                        },
+                        neckWidth: '30%',
+                        neckHeight: '25%'
+
+                        //-- Other available options
+                        // height: pixels or percent
+                        // width: pixels or percent
+                    }
+                },
+                legend: {
+                    enabled: false
+                },
+                series: [{
+                    name: '独立用户',
+                    data: [
+                        ['网站访问', 15654],
+                        ['下载', 4064],
+                        ['获取价格表', 1987],
+                        ['咨询', 976],
+                        ['收藏', 846]
+                    ]
+                }]
+            });
+        });
+    </script>
+</head>
+<body>
+    <div id="container" style="width: 650px; height: 400px; margin: 0 auto"></div>
+</body>
+</html>

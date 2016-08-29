@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "克隆按钮";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+    var moduleId = $.request("moduleId");
+    $(function () {
+        $("#itemTree").treeview({
+            showcheck: true,
+            url: "/SystemManage/ModuleButton/GetCloneButtonTreeJson"
+        });
+    });
+    function submitForm() {
+        var Ids = $("#itemTree").getCheckedNodes();
+        $.submitForm({
+            url: "/SystemManage/ModuleButton/SubmitCloneButton",
+            param: { moduleId: moduleId, Ids: String(Ids) },
+            success: function () {
+                top.modulebutton.$("#gridList").resetSelection();
+                top.modulebutton.$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+
+<div style="margin: 10px;">
+    <div id="itemTree"></div>
+</div>

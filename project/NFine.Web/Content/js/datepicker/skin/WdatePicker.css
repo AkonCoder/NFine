@@ -1,0 +1,13 @@
+.Wdate{
+	border:#999 1px solid;
+	height:20px;
+	background:#fff url(datePicker.png) no-repeat right 4.5px;
+}
+
+.WdateFmtErr{
+	font-weight:bold;
+	color:red;
+}
+.input-wdatepicker {
+    background: url(datepicker_icon.png) right 0 top 1px no-repeat #FFF;
+}

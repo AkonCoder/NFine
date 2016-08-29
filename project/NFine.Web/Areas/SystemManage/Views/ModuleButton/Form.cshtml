@@ -1,0 +1,129 @@
+﻿@{
+    ViewBag.Title = "Form";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+<script>
+    var keyValue = $.request("keyValue");
+    var moduleId = $.request("moduleId");
+    $(function () {
+        initControl();
+        if (!!keyValue) {
+            $.ajax({
+                url: "/SystemManage/ModuleButton/GetFormJson",
+                data: { keyValue: keyValue },
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    $("#form1").formSerialize(data);
+                }
+            });
+        }
+    });
+    function initControl() {
+        $("#F_Location").select2({ minimumResultsForSearch: -1 })
+        $("#F_ParentId").bindSelect({
+            url: "/SystemManage/ModuleButton/GetTreeSelectJson",
+            param: { moduleId: moduleId },
+        });
+    }
+    function submitForm() {
+        if (!$('#form1').formValid()) {
+            return false;
+        }
+        var postData = $("#form1").formSerialize();
+        postData["F_ModuleId"] = moduleId;
+        $.submitForm({
+            url: "/SystemManage/ModuleButton/SubmitForm?keyValue=" + keyValue,
+            param: postData,
+            success: function () {
+                top.modulebutton.$("#gridList").resetSelection();
+                top.modulebutton.$("#gridList").trigger("reloadGrid");
+            }
+        })
+    }
+</script>
+<form id="form1">
+    <div style="padding-top: 30px; margin-right: 30px;">
+        <table class="form">
+            <tr>
+                <th class="formTitle">名称</th>
+                <td class="formValue">
+                    <input id="F_FullName" name="F_FullName" type="text" class="form-control required" placeholder="请输入名称" />
+                </td>
+                <th class="formTitle">编号</th>
+                <td class="formValue">
+                    <input id="F_EnCode" name="F_EnCode" type="text" class="form-control required" placeholder="请输入编号" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">上级</th>
+                <td class="formValue">
+                    <select id="F_ParentId" name="F_ParentId" class="form-control required">
+                        <option value="0">父节点</option>
+                    </select>
+                </td>
+                <th class="formTitle">位置</th>
+                <td class="formValue">
+                    <select id="F_Location" name="F_Location" class="form-control required">
+                        <option value="">==请选择==</option>
+                        <option value="1">初始</option>
+                        <option value="2">选中</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">事件</th>
+                <td class="formValue">
+                    <input id="F_JsEvent" name="F_JsEvent" type="text" class="form-control" />
+                </td>
+                <th class="formTitle">连接</th>
+                <td class="formValue">
+                    <input id="F_UrlAddress" name="F_UrlAddress" type="text" class="form-control" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle">图标</th>
+                <td class="formValue">
+                    <div class="input-group">
+                        <input id="F_Icon" name="F_Icon" type="text" class="form-control">
+                        <span class="input-group-btn">
+                            <a class="btn  btn-primary"><i class="fa fa-ellipsis-h"></i></a>
+                        </span>
+                    </div>
+                </td>
+                <th class="formTitle">排序</th>
+                <td class="formValue">
+                    <input id="F_SortCode" name="F_SortCode" type="text" class="form-control required" />
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle" style="height: 35px;">选项</th>
+                <td class="formValue" colspan="3" style="padding-top: 1px;">
+                    <div class="ckbox">
+                        <input id="F_Split" name="F_Split" type="checkbox"><label for="F_Split">分开线</label>
+                    </div>
+                    <div class="ckbox">
+                        <input id="F_IsPublic" name="F_IsPublic" type="checkbox"><label for="F_IsPublic">公共</label>
+                    </div>
+                    <div class="ckbox">
+                        <input id="F_EnabledMark" name="F_EnabledMark" type="checkbox" checked="checked"><label for="F_EnabledMark">有效</label>
+                    </div>
+
+                    <div class="ckbox">
+                        <input id="F_AllowEdit" name="F_AllowEdit" type="checkbox"><label for="F_AllowEdit">允许编辑</label>
+                    </div>
+                    <div class="ckbox">
+                        <input id="F_AllowDelete" name="F_AllowDelete" type="checkbox"><label for="F_AllowDelete">允许删除</label>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th class="formTitle" valign="top" style="padding-top: 5px;">描述
+                </th>
+                <td class="formValue" colspan="3">
+                    <textarea id="F_Description" name="F_Description" class="form-control" style="height: 100px;"></textarea>
+                </td>
+            </tr>
+        </table>
+    </div>
+</form>
